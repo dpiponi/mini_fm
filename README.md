@@ -1,13 +1,16 @@
 *A minimal FM demodulator*
 
 This is a quick and dirty FM receiver.
+
 The goal was to do close to the minimum to demodulate an FM signal.
 No fancy filtering, just box filters.
 No weird code architecture.
 Just one thread handling a callback for each block of raw binary data.
-It does use this small classes that act as transducers with internal state.
+It does use some small classes that act as transducers with internal state.
 This makes it possible to have convolutions that straddle the divide between
 blocks of input data.
+
+Tested on MacOSX and raspberry-pi.
 
 Missing:
 1. Stereo
