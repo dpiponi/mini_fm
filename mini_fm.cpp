@@ -20,8 +20,8 @@ public:
 };
 
 //
-// Circular buffer of size 10.
-// The output lags behind the input by 10 samples.
+// Circular buffer of size n.
+// The output lags behind the input by n samples.
 //
 template<class Element>
 class Delay {
@@ -53,6 +53,12 @@ public:
 // Filtering cuts down on noise but more importantly it's what
 // allows us to pick up just one frequency band. The filter width
 // was chosen to cut out the subcarriers with stereo, RDS etc.
+//
+//        +----------+               +--------+
+//   -->--+RunningSum+->-+-----------+        |
+//        +----------+   | +-----+   |Subtract+-->--
+//                       +-+Delay+---+        |
+//                         +-----+   +--------+
 //
 template<class Sum, class Element>
 class Smooth {
@@ -131,16 +137,25 @@ public:
     }
 };
 
-class Context {
+//
+//        +------+   +-----------+   
+// I -->--+Smooth+->-+           |   +-------------+
+//        +------+   |           |   |             |
+//                   |PhaseChange+->-+ DownSampler +-->-- audio
+//        +------+   |           |   |             |
+// Q -->--+Smooth+->-+           |   +-------------+
+//        +------+   +-----------+   
+//
+class FMDemodulator {
 public:
     Smooth<unsigned int, unsigned char> i_smooth;
     Smooth<unsigned int, unsigned char> q_smooth;
     PhaseChange phi;
     DownSampler down_sampler;
 
-    Context(int n, int m) : i_smooth(n), q_smooth(n), down_sampler(m) { }
+    FMDemodulator(int n, int m) : i_smooth(n), q_smooth(n), down_sampler(m) { }
 
-    void process(unsigned char *buf, uint32_t len) {
+    void in(unsigned char *buf, uint32_t len) {
         signed short buffer[len];
         int j = 0;
         for (int i = 0; i < len; i += 2) {
@@ -158,8 +173,8 @@ public:
 };
 
 static void rtlsdr_callback(unsigned char *buf, uint32_t len, void *ctx) {
-    Context *context = (Context *)ctx;
-    context->process(buf, len);
+    FMDemodulator *fm_demodulator = (FMDemodulator *)ctx;
+    fm_demodulator->in(buf, len);
 }
 
 int main(int argc, char **argv) {
@@ -183,8 +198,8 @@ int main(int argc, char **argv) {
     // Subsampling audio with a ratio of 20. That takes us
     // from 1MHz to 50KHz.
     //
-    Context *context = new Context(10, 20);
-    rtlsdr_read_async(dev, rtlsdr_callback, context, 0, 0);
+    FMDemodulator *fm_demodulator = new FMDemodulator(10, 20);
+    rtlsdr_read_async(dev, rtlsdr_callback, fm_demodulator, 0, 0);
 
     return 0;
 }
