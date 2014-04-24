@@ -43,3 +43,5 @@ Under Linux run with a command like this to listen to 97.3 MHz:
 Under MacOSX run with a command like this to listen to 97.3 MHz:
 
 `./mini_fm 97300000 | play -r 50000 -t s16 -L -c 1  -`
+
+(You may need to install sox: http://sox.sourceforge.net/)
