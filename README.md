@@ -1,5 +1,8 @@
 **A minimal FM demodulator**
 
+*Status*
+This is a complete working project. The goal was to write a minimal working FM receiver rather than a good one. So I have no plans to add features.
+
 This is a quick and dirty FM receiver using the rtlsdr dongle you can buy from Amazon for about $10.
 
 My goal was to do close to the minimum to demodulate an FM signal.
