@@ -1,6 +1,8 @@
-**A minimal FM demodulator**
+A minimal FM demodulator
+========================
 
-*Status*
+Status
+------
 This is a complete working project. The goal was to write a minimal working FM receiver rather than a good one. So I have no plans to add features.
 
 This is a quick and dirty FM receiver using the rtlsdr dongle you can buy from Amazon for about $10.
@@ -22,7 +24,8 @@ Missing:
 3. RBDS/RDS
 4. Error checking
 
-**Building**
+Building
+--------
 
 You'll need to have installed rtl-sdr
 
@@ -33,7 +36,8 @@ Type `make`
 Edit Makefile to use `-DFAST_ATAN` with g++ if your system is too slow.
 It runs fast enough on a raspberry-pi without doing this.
 
-**Running**
+Running
+-------
 
 Outputs binary audio as single channel signed 16 bit samples at 50KHz.
 
