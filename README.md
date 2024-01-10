@@ -22,7 +22,7 @@ Missing:
 2. RBDS/RDS
 3. Error checking
 
-(I switched to using a Chebyshev filter as it produces much better results. I also added de-emphasis code as it's almost free once you've written IIR code to make the Chebyshev filter worked.)
+(I switched to using a Chebyshev filter as it produces much better results. I also added de-emphasis code as it's almost free once you've written IIR code to make the Chebyshev filter work. Also switched to 40KHz audio.)
 
 Building
 --------
@@ -32,9 +32,6 @@ You'll need to have installed rtl-sdr
 See: http://sdr.osmocom.org/trac/wiki/rtl-sdr
 
 Type `make`
-
-Edit Makefile to use `-DFAST_ATAN` with g++ if your system is too slow.
-It runs fast enough on a raspberry-pi without doing this.
 
 Running
 -------
